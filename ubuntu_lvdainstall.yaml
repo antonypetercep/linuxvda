@@ -1,0 +1,47 @@
+---
+  - name: Install LVDA and run the setup script to configure
+    hosts: all
+    become: true
+    tasks:
+
+# copy the xendesktopvda based on major version
+      - name: Copy the package to the destination root folder
+        copy:
+          src: packages/xendesktopvda_22.03.1000.7-1.ubuntu18.04_amd64.deb
+          dest: /root
+        when: ansible_distribution_major_version == "18"
+
+      - name: Copy the package to the destination root folder of Ubuntu 20
+        copy:
+          src: packages/xendesktopvda_22.03.1000.7-1.ubuntu20.04_amd64.deb
+          dest: /root
+        when: ansible_distribution_major_version == "20"
+
+#installation of package based on Ubuntu Major verison
+
+      - name: Install the lvda package baed for Ubuntu 18
+        apt:
+          deb: /root/xendesktopvda_22.03.1000.7-1.ubuntu18.04_amd64.deb
+        when: ansible_distribution_major_version == "18"
+
+      - name: Install the lvda package baed for Ubuntu 20
+        apt:
+           deb: /root/xendesktopvda_22.03.1000.7-1.ubuntu20.04_amd64.deb
+        when: ansible_distribution_major_version == "20"
+
+
+#installation of dotnet
+      - name: Create a dotnet directory /opt/dotnet
+        file: 
+          path: /opt/dotnet
+          state: directory
+
+      - name: Untar dotnet package
+        unarchive: 
+          src: packages/aspnetcore-runtime-6.0.9-linux-x64.tar.gz
+          dest: /opt/dotnet
+
+# calling ctxinstall and ctxsetup
+
+      - name: Copy the shell script to call the ctxinstall and env arguments
+        script: scripts/call_ctxinstall.sh 

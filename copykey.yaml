@@ -1,0 +1,11 @@
+---
+- name: Transfer SSH public key to remote nodes
+  hosts: all
+  become: true
+  tasks:
+      
+    - name: Copying using authorize module
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
