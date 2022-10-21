@@ -1,3 +1,2 @@
 [UbuntuVDA]
 #lvda1 ansible_ssh_host=10.110.155.85 ansible_user=root
-10.110.197.163 ansible_ssh_host=10.110.197.163 ansible_ssh_user=root
